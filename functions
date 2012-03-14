@@ -506,6 +506,27 @@ bootlogd_stop() {
 		  -e 's/\^\[(\[1?[0-9][0-9]|%)G//g' -e 's/\^\[\[0;1//g'  /var/log/boot
 }
 
+RANDOM_SEED=/var/lib/misc/random-seed
+RANDOM_POOL_FILE=/proc/sys/kernel/random/poolsize
+
+load_random_seed() {
+	if [[ -f "$RANDOM_SEED" ]]; then
+		cat "$RANDOM_SEED" > /dev/urandom
+	fi
+}
+
+store_random_seed() {
+	local pool_size
+	install -TDm 0600 /dev/null "$RANDOM_SEED"
+	if [[ -r "$RANDOM_POOL_FILE" ]]; then
+		read pool_size < "$RANDOM_POOL_FILE"
+		(( pool_size /= 8 ))
+	else
+		pool_size=512
+	fi
+	dd if=/dev/urandom of="$RANDOM_SEED" count=1 bs=$pool_size &> /dev/null
+}
+
 ###############################
 # Custom hooks in initscripts #
 ###############################
