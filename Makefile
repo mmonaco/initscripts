@@ -6,14 +6,8 @@ DIRS := \
 	/etc/rc.d/functions.d \
 	/etc/logrotate.d \
 	/etc/profile.d \
-	/usr/sbin \
-	/etc/tmpfiles.d \
 	/usr/lib/tmpfiles.d \
-	/etc/binfmt.d \
-	/usr/lib/binfmt.d \
-	/etc/sysctl.d \
-	/usr/lib/sysctl.d \
-	/usr/lib/initscripts \
+	/usr/sbin \
 	/usr/share/bash-completion/completions \
 	/usr/share/zsh/site-functions \
 	/usr/share/man/man5 \
@@ -41,7 +35,6 @@ install: installdirs doc
 	install -m755 -t $(DESTDIR)/usr/sbin rc.d
 	install -m644 -t $(DESTDIR)/usr/share/man/man5 $(filter %.5, $(MAN_PAGES))
 	install -m644 -t $(DESTDIR)/usr/share/man/man8 $(filter %.8, $(MAN_PAGES))
-	install -m755 -t $(DESTDIR)/usr/lib/initscripts arch-tmpfiles arch-sysctl arch-binfmt
 	install -m644 tmpfiles.conf $(DESTDIR)/usr/lib/tmpfiles.d/arch.conf
 	install -m644 -T bash-completion $(DESTDIR)/usr/share/bash-completion/completions/rc.d
 	install -m644 -T zsh-completion $(DESTDIR)/usr/share/zsh/site-functions/_rc.d

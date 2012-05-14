@@ -20,9 +20,11 @@ mountpoint -q /dev     || mount -t devtmpfs dev /dev -o mode=0755,nosuid
 mkdir -p -m 1777 /run/lock
 mkdir -p /dev/{pts,shm}
 mountpoint -q /dev/pts || mount /dev/pts &>/dev/null ||
-	mount -n -t devpts devpts /dev/pts -o mode=0620,gid=5,nosuid,noexec
+	mount -t devpts devpts /dev/pts -o mode=0620,gid=5,nosuid,noexec
 mountpoint -q /dev/shm || mount /dev/shm &>/dev/null ||
-	mount -n -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
+	mount -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
+mountpoint -q /proc/sys/fs/binfmt_misc || mount /proc/sys/fs/binfmt_misc &>/dev/null ||
+	mount -t binfmt_misc binfmt /proc/sys/fs/binfmt_misc
 
 if [[ ! -e /run/initramfs/fsck-root ]]; then
 	# remount root ro to allow for fsck later on, we remount now to

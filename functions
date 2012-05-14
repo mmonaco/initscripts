@@ -576,8 +576,7 @@ umount_all() {
 }
 
 remove_leftover() {
-	stat_busy "Removing Leftover Files"
-		/usr/lib/initscripts/arch-tmpfiles --create --remove && stat_done || stat_fail
+	status -v 'Removing Leftover Files' /usr/lib/systemd/systemd-tmpfiles --create --remove
 		# move from static /var/{run,lock} to /run
 		if [[ ! -L /var/lock ]]; then
 			rm -rf /var/lock
