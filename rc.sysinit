@@ -189,6 +189,7 @@ status "Activating Swap" swapon -a
 [[ $TIMEZONE ]] && status "Configuring Time Zone" set_timezone "$TIMEZONE"
 
 status "Initializing Random Seed" load_random_seed
+status "Storing new Random Seed" store_random_seed
 
 # Remove leftover files
 remove_leftover
