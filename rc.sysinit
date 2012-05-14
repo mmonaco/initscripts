@@ -152,8 +152,8 @@ activate_cryptos() {
 	(( unlocked )) && activate_vgs
 }
 
-# Map any unmapped encrypted volumes in crypttab
-activate_cryptos
+# Map any unmapped encrypted volumes in crypttab, non-random
+activate_cryptos -O \!%random
 
 # Check filesystems
 run_hook sysinit_prefsck
@@ -184,12 +184,15 @@ run_hook sysinit_postmount
 	status "Activating monitoring of LVM2 groups" \
 		vgchange --monitor y >/dev/null
 
-status "Activating Swap" swapon -a
-
 [[ $TIMEZONE ]] && status "Configuring Time Zone" set_timezone "$TIMEZONE"
 
 status "Initializing Random Seed" load_random_seed
 status "Storing new Random Seed" store_random_seed
+
+# Map any unmapped encrypted volumes in crypttab, only random
+activate_cryptos -O %random
+
+status "Activating Swap" swapon -a
 
 # Remove leftover files
 remove_leftover
