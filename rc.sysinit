@@ -123,14 +123,37 @@ udevd_modprobe sysinit
 # Activate LVM2 groups if any
 activate_vgs
 
-# Set up non-root encrypted partition mappings
-if [[ -f /etc/crypttab ]] && type -p cryptsetup >/dev/null; then
+activate_cryptos() {
+	local vol vols fail=0 unlocked=0 i=0
+	
+	[[ -f "/etc/crypttab" ]] || return
+	type -p cryptmount >/dev/null || return
+	mapfile -t vols < <(cryptmount -Lq "$@")
+
+	for ((i = 0; i < ${#vols[@]}; i++)); do
+		[[ ! -e "/dev/mapper/${vols[$i]}" ]] || unset vols[$i]
+	done
+
+	(( ${#vols[@]} )) || return
+
 	stat_busy "Unlocking encrypted volumes:"
-	crypto_unlocked=0
-	read_crypttab do_unlock && stat_done || stat_fail
-	# Maybe someone has LVM on an encrypted block device
-	(( crypto_unlocked )) && activate_vgs
-fi
+
+	for vol in ${vols[@]}; do
+		if cryptmount -Mq "$vol"; then
+			stat_append "$C_DONE $vol$C_MAIN"
+			unlocked=1
+		else
+			stat_append "$C_FAIL $vol$C_MAIN"
+			fail=1
+		fi
+	done
+
+	(( fail )) && stat_fail || stat_done
+	(( unlocked )) && activate_vgs
+}
+
+# Map any unmapped encrypted volumes in crypttab
+activate_cryptos
 
 # Check filesystems
 run_hook sysinit_prefsck
