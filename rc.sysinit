@@ -153,7 +153,7 @@ activate_cryptos() {
 }
 
 # Map any unmapped encrypted volumes in crypttab, non-random
-activate_cryptos -O \!%random
+activate_cryptos -O '!%early,!%random'
 
 # Check filesystems
 run_hook sysinit_prefsck
@@ -190,7 +190,7 @@ status "Initializing Random Seed" load_random_seed
 status "Storing new Random Seed" store_random_seed
 
 # Map any unmapped encrypted volumes in crypttab, only random
-activate_cryptos -O %random
+activate_cryptos -O '!%early,%random'
 
 status "Activating Swap" swapon -a
 
