@@ -137,10 +137,7 @@ status "Activating Swap" swapon -a
 
 [[ $TIMEZONE ]] && status "Configuring Time Zone" set_timezone "$TIMEZONE"
 
-RANDOM_SEED=/var/lib/misc/random-seed
-[[ -f $RANDOM_SEED ]] &&
-	status "Initializing Random Seed" \
-		cp $RANDOM_SEED /dev/urandom
+status 'Initializing Random Seed' /usr/lib/systemd/systemd-random-seed load
 
 # Remove leftover files
 remove_leftover
