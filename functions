@@ -344,6 +344,20 @@ kill_all() {
 		fi
 }
 
+load_modules() {
+	local rc=0
+
+	/usr/lib/systemd/systemd-load-modules
+	rc=$?
+
+	if (( ${#MODULES[*]} )); then
+		modprobe -ab "${MODULES[@]}"
+		(( rc += $? ))
+	fi
+
+	return $rc
+}
+
 # Start/trigger UDev, load MODULES and settle UDev
 udevd_modprobe() {
 	# $1 = where we are being called from.
@@ -357,9 +371,8 @@ udevd_modprobe() {
 		udevadm trigger --action=add --type=devices
 	stat_done
 
-	# Load modules from the MODULES array defined in rc.conf
-	(( ${#MODULES[*]} )) &&
-		status -v "Loading User-specified Modules" modprobe -ab "${MODULES[@]}"
+	# Load modules from the MODULES array and modules-load.d
+	status -v "Loading User-specified Modules" load_modules
 
 	status "Waiting for UDev uevents to be processed" \
 		udevadm settle
