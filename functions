@@ -347,7 +347,7 @@ kill_all() {
 load_modules() {
 	local rc=0
 
-	/usr/lib/systemd/systemd-load-modules
+	/usr/lib/systemd/systemd-modules-load
 	rc=$?
 
 	if (( ${#MODULES[*]} )); then
