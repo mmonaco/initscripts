@@ -362,7 +362,7 @@ load_modules() {
 udevd_modprobe() {
 	# $1 = where we are being called from.
 	# This is used to determine which hooks to run.
-	status "Starting UDev Daemon" /usr/lib/udev/udevd --daemon
+	status "Starting UDev Daemon" /usr/lib/systemd/systemd-udevd --daemon
 
 	run_hook "$1_udevlaunched"
 
