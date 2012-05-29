@@ -13,13 +13,6 @@ DIRS := \
 	/usr/share/man/man5 \
 	/usr/share/man/man8
 
-MAN_PAGES := \
-	rc.d.8 \
-	rc.conf.5 \
-	locale.conf.5 \
-	vconsole.conf.5 \
-	hostname.5
-
 all: doc
 
 installdirs:
@@ -33,8 +26,8 @@ install: installdirs doc
 	install -m755 -t $(DESTDIR)/etc/rc.d hwclock network netfs
 	install -m755 -t $(DESTDIR)/etc/profile.d locale.sh
 	install -m755 -t $(DESTDIR)/usr/sbin rc.d
-	install -m644 -t $(DESTDIR)/usr/share/man/man5 $(filter %.5, $(MAN_PAGES))
-	install -m644 -t $(DESTDIR)/usr/share/man/man8 $(filter %.8, $(MAN_PAGES))
+	install -m644 -t $(DESTDIR)/usr/share/man/man5 rc.conf.5
+	install -m644 -t $(DESTDIR)/usr/share/man/man8 rc.d.8
 	install -m644 tmpfiles.conf $(DESTDIR)/usr/lib/tmpfiles.d/initscripts.conf
 	install -m644 -T bash-completion $(DESTDIR)/usr/share/bash-completion/completions/rc.d
 	install -m644 -T zsh-completion $(DESTDIR)/usr/share/zsh/site-functions/_rc.d

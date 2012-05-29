@@ -102,7 +102,8 @@ HARDWARE[[H]]
 -------------
 *MODULES=*
 
-Modules to load at boot-up.  To blacklist modules, see "man modprobe.d".
+Modules to load at boot-up.  To blacklist modules, see "man modprobe.d". See also
+"man modules-load.d".
 
 Default: ().
 
@@ -217,6 +218,11 @@ make a difference if the hwclock program has been calibrated correctly.
 If you use a network filesystem you should enable 'netfs'.
 
 Default: (syslog-ng network crond)
+
+SEE ALSO
+--------
+
+hostname(5), vconsole.conf(5), locale.conf(5), hwclock(8)
 
 AUTHORS
 -------
