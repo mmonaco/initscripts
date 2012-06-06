@@ -38,10 +38,10 @@ install: installdirs doc
 %.8: %.8.txt
 	a2x -d manpage -f manpage $<
 
-doc: $(MAN_PAGES)
+doc: rc.conf.5 rc.d.8
 
 clean:
-	rm -f $(MAN_PAGES)
+	rm -f rc.conf.5 rc.d.8
 
 tar:
 	git archive HEAD --prefix=initscripts-$(VER)/ | xz > initscripts-$(VER).tar.xz
