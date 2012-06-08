@@ -82,7 +82,12 @@ if [[ -x /run/initramfs/shutdown ]]; then
 	if [[ $RUNLEVEL = 0 ]]; then
 		action="poweroff"
 	else
-		action="reboot"
+		{ read kexec_loaded </sys/kernel/kexec_loaded; } 2>/dev/null
+		if (( kexec_loaded )); then
+			action="kexec"
+		else
+			action="reboot"
+		fi
 	fi
 
 	# make /run/initrafs a mount
