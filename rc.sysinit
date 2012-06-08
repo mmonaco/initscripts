@@ -119,8 +119,8 @@ run_hook sysinit_postfsck
 # Single-user login and/or automatic reboot if needed
 fsck_reboot $fsckret
 
-status "Remounting Root" \
-	mount -o remount /
+status "Remounting Root and API filesystems" \
+	/usr/lib/systemd/systemd-remount-fs
 
 # now mount all the local filesystems
 run_hook sysinit_premount
