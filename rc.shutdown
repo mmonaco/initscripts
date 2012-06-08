@@ -71,7 +71,7 @@ if [[ -f /etc/crypttab ]] && type -p cryptsetup >/dev/null; then
 	stat_done
 fi
 
-[[ $USELVM = [Yy][Ee][Ss] && -x $(type -P lvm) && -d /sys/block ]] &&
+[[ $USELVM = [Yy][Ee][Ss] && -x $(type -P lvm) ]] &&
 	status "Deactivating LVM2 groups" vgchange --sysinit -a n &>/dev/null
 
 run_hook shutdown_poweroff
