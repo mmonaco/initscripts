@@ -229,15 +229,6 @@ start_daemon() {
 	have_daemon "$1" && /etc/rc.d/"$1" start
 }
 
-# Never use this function, it causes daemons to be stoped in the wrong order.
-# The only way to start a daemon at boot is to add it to the DAEMONS array.
-ck_depends() {
-	local daemon
-	for daemon; do
-		ck_daemon "$daemon" && start_daemon "$daemon"
-	done
-}
-
 start_daemon_bkgd() {
 	stat_bkgd "Starting $1"
 	(start_daemon "$1") >/dev/null &
