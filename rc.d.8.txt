@@ -72,14 +72,8 @@ Examples[[E]]
 *rc.d start sshd gpm*::
 	Starts *sshd* and *gpm* scripts.
 
-*rc.d start --auto --stopped*::
-	Starts all stopped scripts which are started at startup.
-
 *rc.d stop crond*::
 	Stops the *crond* script.
-
-*rc.d stop --noauto*::
-	Stop all script which are not runned at startup
 
 *rc.d restart crond*::
 	Restarts the *crond* script.

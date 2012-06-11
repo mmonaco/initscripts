@@ -23,7 +23,6 @@ e.g: $name list
      $name list sshd gpm
      $name list --started gpm
      $name start sshd gpm
-     $name stop --noauto
      $name help
 EOF
 	exit ${1:-1}
