@@ -208,6 +208,7 @@ DAEMONS[[D]]
 *DAEMONS=*
 
 Daemons to start at boot-up (in this order)
+
 	- prefix a daemon with a ! to disable it
 	- prefix a daemon with a @ to start it up in the background
 
