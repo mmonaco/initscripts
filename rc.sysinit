@@ -26,7 +26,7 @@ mountpoint -q /dev/shm || mount /dev/shm &>/dev/null ||
 mountpoint -q /proc/sys/fs/binfmt_misc || mount /proc/sys/fs/binfmt_misc &>/dev/null ||
 	mount -t binfmt_misc binfmt /proc/sys/fs/binfmt_misc
 
-if [[ ! -e /run/initramfs/fsck-root ]]; then
+if [[ ! -e /run/initramfs/root-fsck ]]; then
 	# remount root ro to allow for fsck later on, we remount now to
 	# make sure nothing can open files rw on root which would block a remount
 	findmnt / --options ro &>/dev/null ||
