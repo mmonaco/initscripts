@@ -67,7 +67,8 @@ udevd_modprobe sysinit
 
 if [[ -s /etc/locale.conf ]]; then
 	parse_envfile /etc/locale.conf "LANG"
-	[[ $LANG ]] && LOCALE=$LANG
+elif [[ $LOCALE ]]; then
+	export LANG=$LOCALE
 fi
 
 status 'Configuring Virtual Consoles' /usr/lib/systemd/systemd-vconsole-setup
