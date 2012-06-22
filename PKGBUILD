@@ -16,7 +16,6 @@ optdepends=('net-tools: legacy networking support'
             'bridge-utils: Network bridging support'
             'dhcpcd: DHCP network configuration'
             'wireless_tools: Wireless networking')
-makedepends=(asciidoc)
 source=()
 sha256sums=()
 
