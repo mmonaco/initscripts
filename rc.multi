@@ -12,6 +12,8 @@ run_hook multi_start
 /usr/lib/systemd/systemd-sysctl
 
 # Load additional binary formats
+mountpoint -q /proc/sys/fs/binfmt_misc || mount /proc/sys/fs/binfmt_misc &>/dev/null ||
+	mount -t binfmt_misc binfmt /proc/sys/fs/binfmt_misc
 /usr/lib/systemd/systemd-binfmt
 
 # Start daemons
