@@ -580,7 +580,7 @@ umount_all() {
 }
 
 remove_leftover() {
-	status -v 'Removing Leftover Files' systemd-tmpfiles --create --remove
+	status -v 'Removing Leftover Files' systemd-tmpfiles --create --remove --clean
 }
 
 bootlogd_stop() {
