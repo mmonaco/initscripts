@@ -382,52 +382,21 @@ activate_vgs() {
 }
 
 do_unlock() {
-	# $1 = requested name
-	# $2 = source device
-	# $3 = password
-	# $4 = options
-	stat_append "${1}.."
-	local open=create a=$1 b=$2 failed=0
-	# Ordering of options is different if you are using LUKS vs. not.
-	# Use ugly swizzling to deal with it.
-	# isLuks only gives an exit code but no output to stdout or stderr.
-	if cryptsetup isLuks "$2" 2>/dev/null; then
-		open=luksOpen
-		a=$2
-		b=$1
+	local name=$1 device=$2 password=$3 options=$4
 	fi
 	case $3 in
 		SWAP)
-			local _overwriteokay=0
-			if [[ -b $2 && -r $2 ]]; then
-				# This is DANGEROUS! If there is any known file system,
-				# partition table, RAID or LVM volume on the device
-				# we don't overwrite it.
-				#
-				# 'blkid' returns 2 if no valid signature has been found.
-				# Only in this case we should allow overwriting the device.
-				#
-				# This sanity check _should_ be sufficient, but it might not.
-				# This may cause dataloss if it is not used carefully.
-				blkid -p "$2" &>/dev/null
-				(( $? == 2 )) && _overwriteokay=1
-			fi
-			if (( _overwriteokay == 0 )); then
-				false
-			elif cryptsetup -d /dev/urandom $4 $open "$a" "$b" >/dev/null; then
-				stat_append "creating swapspace.."
-				mkswap -f -L $1 /dev/mapper/$1 >/dev/null
-			fi;;
+			$password="/dev/urandom"
+			$options+=",swap"
 		ASK)
-			printf "\nOpening '$1' volume:\n"
-			cryptsetup $4 $open "$a" "$b" < /dev/console;;
+			$password="none"
 		/dev*)
 			local ckdev=${3%%:*}
 			local cka=${3#*:}
 			local ckb=${cka#*:}
 			local cka=${cka%:*}
-			local ckfile=/dev/ckfile
-			local ckdir=/dev/ckdir
+			local ckfile=$(mktemp /run/initscripts-cryptsetup/key-XXXXXX)
+			local ckdir=/run/initscripts-cryptsetup/drive
 			case ${cka} in
 				*[!0-9]*)
 					# Use a file on the device
@@ -442,36 +411,30 @@ do_unlock() {
 					# cka is numeric: cka=offset, ckb=length
 					dd if=${ckdev} of=${ckfile} bs=1 skip=${cka} count=${ckb} >/dev/null 2>&1;;
 			esac
-			cryptsetup -d ${ckfile} $4 $open "$a" "$b" >/dev/null
-			dd if=/dev/urandom of=${ckfile} bs=1 count=$(stat -c %s ${ckfile}) conv=notrunc >/dev/null 2>&1
-			rm ${ckfile};;
+			$password="${ckfile}"
 		/*)
-			cryptsetup -d "$3" $4 $open "$a" "$b" >/dev/null;;
 		*)
 			printf "${C_FAIL}crypttab contains a literal encryption key. This will stop working in the future.${C_OTHER}\n"
-			echo "$3" | cryptsetup $4 $open "$a" "$b" >/dev/null;;
+			$password=$(mktemp /run/initscripts-cryptsetup/key-XXXXXX)
+			echo "$3" > $password
 	esac
-	if (( $? )); then
-		failed=1
-		stat_append "failed "
-	else
-		stat_append "ok "
-	fi
-	return $failed
+	/usr/lib/systemd/systemd-cryptsetup $name $device $password $options &
 }
 
 read_crypttab() {
 	# $1 = function to call with the split out line from the crypttab
-	local line nspo failed=0
+	local line nspo failed
+	mkdir -p /run/initscripts-cryptsetup
 	while read line; do
 		[[ $line && $line != '#'* ]] || continue
 		eval nspo=("${line%#*}")
-		if $1 "${nspo[0]}" "${nspo[1]}" "${nspo[2]}" "${nspo[*]:3}"; then
-			crypto_unlocked=1
-		else
-			failed=1
-		fi
+		$1 "${nspo[0]}" "${nspo[1]}" "${nspo[2]}" "${nspo[*]:3}"
 	done < /etc/crypttab
+	systemd-tty-ask-password-agent --query --console
+	failed=$?
+	wait
+	shred /run/initsrcipts-cryptsetup/key*
+	rm -rf /run/initscripts-cryptsetup
 	return $failed
 }
 
