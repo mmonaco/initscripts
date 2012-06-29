@@ -30,8 +30,6 @@ mountpoint -q /dev/shm || mount -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
 # log all console messages
 bootlogd -p /run/bootlogd.pid
 
-status 'Configuring Virtual Consoles' /usr/lib/systemd/systemd-vconsole-setup
-
 if [[ ! -e /run/initramfs/root-fsck ]]; then
 	# remount root ro to allow for fsck later on, we remount now to
 	# make sure nothing can open files rw on root which would block a remount
@@ -67,6 +65,9 @@ fi
 
 # Start/trigger UDev, load MODULES and settle UDev
 udevd_modprobe sysinit
+
+# this must be done after udev has loaded the KMS modules
+status 'Configuring Virtual Consoles' /usr/lib/systemd/systemd-vconsole-setup
 
 # bring up the loopback interface
 [[ -d /sys/class/net/lo ]] &&
