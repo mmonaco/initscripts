@@ -588,8 +588,6 @@ bootlogd_stop() {
 	touch /var/log/boot
 	kill $(< /run/bootlogd.pid)
 	rm -f /run/bootlogd.pid
-	sed -i -r -e 's/\^\[\[[0-9]?;?[0-9]?[0-9]?;?[0-9]?[0-9]?[ms]//g' \
-		  -e 's/\^\[(\[1?[0-9][0-9]|%)G//g' -e 's/\^\[\[0;1//g'  /var/log/boot
 }
 
 ###############################
