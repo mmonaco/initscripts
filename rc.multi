@@ -31,4 +31,6 @@ run_hook multi_end
 
 bootlogd_stop
 
+rm -f /run/nologin
+
 # vim: set ts=2 sw=2 noet:
