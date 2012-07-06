@@ -3,7 +3,7 @@ pkgver=$(date +%Y%m%d)
 pkgrel=$(git log -1 --pretty=format:%h)
 pkgdesc="System initialization/bootup scripts"
 arch=('any')
-url="http://www.archlinux.org"
+url="https://www.archlinux.org"
 license=('GPL')
 groups=('base')
 conflicts=('initscripts')
@@ -26,5 +26,5 @@ build() {
 
 package() {
   cd ..
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir/" install
 }
