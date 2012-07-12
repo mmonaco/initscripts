@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# /etc/rc.single: Single-user startup script.
+# /etc/rc.single: Single-user start-up script.
 #
 
 . /etc/rc.conf
@@ -18,7 +18,7 @@ if [[ $PREVLEVEL != N ]]; then
 
 	run_hook single_postkillall
 
-	# Start/trigger UDev, load MODULES and settle UDev
+	# Start/trigger udev, load MODULES, and settle udev
 	udevd_modprobe single
 	
 	# Removing leftover files

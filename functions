@@ -2,7 +2,7 @@
 # initscripts functions
 #
 
-# sanitize PATH (will be overridden later when /etc/profile is sourced, but is useful for UDev)
+# sanitize PATH (will be overridden later when /etc/profile is sourced but is useful for udev)
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 localevars=(LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY
@@ -13,7 +13,7 @@ vconsolevars=(KEYMAP KEYMAP_TOGGLE FONT FONT_MAP FONT_UNIMAP)
 
 if [[ $1 == "start" ]]; then
 	if [[ $STARTING ]]; then
-		echo "A daemon is starting another daemon, this is unlikely to work as intended."
+		echo "A daemon is starting another daemon; this is unlikely to work as intended."
 	else
 		export STARTING=1
 	fi
@@ -69,7 +69,7 @@ unset TERM_COLORS
 # clear the TZ envvar, so daemons always respect /etc/localtime
 unset TZ
 
-# sanitize the locale settins
+# sanitize the locale settings
 unset "${localevars[@]}"
 
 parse_envfile() {
@@ -325,13 +325,13 @@ kill_all_wait() {
 }
 
 kill_all() {
-	stat_busy "Sending SIGTERM To Processes"
+	stat_busy "Sending SIGTERM to processes"
 		kill_all_wait 15 40
 		if (( $? == 0 )); then
 			stat_done
 		else
 			stat_fail
-			status "Sending SIGKILL To Processes" kill_all_wait 9 60
+			status "Sending SIGKILL to processes" kill_all_wait 9 60
 		fi
 }
 
@@ -349,23 +349,23 @@ load_modules() {
 	return $rc
 }
 
-# Start/trigger UDev, load MODULES and settle UDev
+# Start/trigger udev, load MODULES, and settle udev
 udevd_modprobe() {
 	# $1 = where we are being called from.
 	# This is used to determine which hooks to run.
-	status "Starting UDev Daemon" /usr/lib/systemd/systemd-udevd --daemon
+	status "Starting udev daemon" /usr/lib/systemd/systemd-udevd --daemon
 
 	run_hook "$1_udevlaunched"
 
-	stat_busy "Triggering UDev uevents"
+	stat_busy "Triggering udev uevents"
 		udevadm trigger --action=add --type=subsystems
 		udevadm trigger --action=add --type=devices
 	stat_done
 
 	# Load modules from the MODULES array and modules-load.d
-	status -v "Loading User-specified Modules" load_modules
+	status -v "Loading user-specified modules" load_modules
 
-	status "Waiting for UDev uevents to be processed" \
+	status "Waiting for udev uevents to be processed" \
 		udevadm settle
 
 	run_hook "$1_udevsettled"
@@ -402,14 +402,14 @@ do_unlock_legacy() {
 			local _overwriteokay=0
 			if [[ -b $2 && -r $2 ]]; then
 				# This is DANGEROUS! If there is any known file system,
-				# partition table, RAID or LVM volume on the device
+				# partition table, RAID, or LVM volume on the device,
 				# we don't overwrite it.
 				#
 				# 'blkid' returns 2 if no valid signature has been found.
-				# Only in this case we should allow overwriting the device.
+				# Only in this case should we allow overwriting the device.
 				#
 				# This sanity check _should_ be sufficient, but it might not.
-				# This may cause dataloss if it is not used carefully.
+				# This may cause data loss if it is not used carefully.
 				blkid -p "$2" &>/dev/null
 				(( $? == 2 )) && _overwriteokay=1
 			fi
@@ -535,7 +535,7 @@ set_timezone() {
 	[[ $tz ]] || return 1
 
 	if [[ ! -e $zonefile ]]; then
-		printf "error: \`%s' is not a valid timezone\n" "$tz"
+		printf "error: \`%s' is not a valid time zone\n" "$tz"
 		return 1
 	fi
 
@@ -583,8 +583,8 @@ fsck_reboot() {
 		echo "*                                                          *"
 		echo "*  Please repair manually and reboot. Note that the root   *"
 		echo "*  file system is currently mounted read-only. To remount  *"
-		echo "*  it read-write type: mount -o remount,rw /               *"
-		echo "*  When you exit the maintenance shell the system will     *"
+		echo "*  it read-write, type: mount -o remount,rw /              *"
+		echo "*  When you exit the maintenance shell, the system will    *"
 		echo "*  reboot automatically.                                   *"
 		echo "*                                                          *"
 		echo "************************************************************"
@@ -607,12 +607,12 @@ umount_all() {
 
 	findmnt -mrunRo TARGET,FSTYPE,OPTIONS / | {
 		while read -r target fstype options; do
-			# match only targetted fstypes
+			# match only targeted fstypes
 			if [[ $1 && $1 != "$fstype" ]]; then
 				continue
 			fi
 
-			# don't unmount API filesystems
+			# do not unmount API filesystems
 			if [[ $target = /@(proc|sys|run|dev|dev/pts) ]]; then
 				continue
 			fi
@@ -634,7 +634,7 @@ umount_all() {
 }
 
 remove_leftover() {
-	status -v 'Removing Leftover Files' systemd-tmpfiles --create --remove --clean
+	status -v 'Removing leftover files' systemd-tmpfiles --create --remove --clean
 }
 
 bootlogd_stop() {

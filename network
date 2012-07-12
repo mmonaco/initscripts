@@ -235,15 +235,15 @@ case "$1" in
 		# deprecation check
 		need_legacy && deprecated
 		if ! ck_daemon network; then
-			echo "Network is already running.  Try 'network restart'"
+			echo "Network is already running. Try 'network restart'"
 			exit
 		fi
-		stat_busy "Starting Network"
+		stat_busy "Starting network"
 		error=0
 		if need_legacy; then
 			# bring up bridge interfaces
 			bridge_up
-			# bring up ethernet interfaces
+			# bring up Ethernet interfaces
 			for ifline in ${INTERFACES[@]}; do
 				if [[ $ifline = ${ifline#!} ]]; then
 					ifup $ifline || error=1
@@ -271,11 +271,11 @@ case "$1" in
 		# deprecation check
 		need_legacy && deprecated
 		if [[ $NETWORK_PERSIST =~ yes|YES && $RUNLEVEL == [06] ]]; then
-			status "Skipping Network Shutdown" true
+			status "Skipping network shutdown" true
 			exit 0
 		fi
 
-		stat_busy "Stopping Network"
+		stat_busy "Stopping network"
 		rm_daemon network
 		error=0
 		if need_legacy; then

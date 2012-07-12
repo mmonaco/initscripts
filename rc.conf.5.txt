@@ -16,21 +16,21 @@ DESCRIPTION
 -----------
 The /etc/rc.conf file is the system configuration file for Arch-specific
 settings. The format is bash. It contains several commonly-edited settings such
-as timezone; keymap; kernel modules; daemons to load at start-up; etc. It is
+as time zone, keymap, kernel modules, daemons to load at start-up, etc. It is
 split up in a few sections to categorize configuration settings: localization,
-hardware, networking and daemons.
+hardware, networking, and daemons.
 
 LOCALIZATION[[L]]
 -----------------
 *TIMEZONE=*
 
-Specifies the timezone. The setting takes effect on boot by ensuring that /etc/localtime is a symlink
-to the correct zoneinfo file. Possible timezones are the relative path to a zoneinfo file starting
-from the directory /usr/share/zoneinfo. For example, a German timezone would be Europe/Berlin,
+Specifies the time zone. The setting takes effect on boot by ensuring that /etc/localtime is a symlink
+to the correct zoneinfo file. Possible time zones are the relative path to a zoneinfo file starting
+from the directory /usr/share/zoneinfo. For example, a German time zone would be Europe/Berlin,
 which refers to the file /usr/share/zoneinfo/Europe/Berlin.
 
-Note: if empty, /etc/localtime is not changed. This is useful if /etc/localtime is maintained manually
-or by a third-party tool; or if there is no reason to change it from what was set during install.
+Note: If empty, /etc/localtime is not changed. This is useful if /etc/localtime is maintained manually
+or by a third-party tool, or if there is no reason to change it from what was set during install.
 
 Default: empty
 
@@ -43,9 +43,9 @@ Options:
 	- empty: fall back to the value in /var/lib/hwclock/adjtime, which defaults to UTC. This is recommended
 	  as other users of hwclock might change the adjtime file and hence cause rc.conf and adjtime to be out of sync.
 	- "UTC": most robust, allows operating systems to abstract local time and ease DST.
-	- "localtime": apply timezone (and DST) in hardwareclock: discouraged.
-	  Choose this if you dualboot with an OS which cannot handle UTC BIOS times correctly, like Windows (note
-	  that recent Windows'es can use UTC, which is preferable).
+	- "localtime": apply time zone (and DST) in hardwareclock: discouraged.
+	  Choose this if you dual-boot with an OS which cannot handle UTC BIOS times correctly, like Windows (note
+	  that recent Windows versions can use UTC, which is preferable).
 	- any other value will result in the hardware clock being left untouched (useful for virtualization)
 
 Default: empty
@@ -87,14 +87,14 @@ Default: empty
 
 *DAEMON_LOCALE=*
 
-	- If set to 'yes', use $LOCALE as the locale during daemon startup and during the boot process.
+	- If set to 'yes', use $LOCALE as the locale during daemon start-up and during the boot process.
 	- If set to 'no', the C locale is used.
 
 Default: "yes"
 
 *USECOLOR=*
 
-Use ANSI color sequences in startup messages
+Use ANSI color sequences in start-up messages
 
 Default: "yes"
 
@@ -102,26 +102,26 @@ HARDWARE[[H]]
 -------------
 *MODULES=*
 
-Modules to load at boot-up.  To blacklist modules, see "man modprobe.d". See also
-"man modules-load.d".
+Modules to load at boot-up.  To blacklist modules, see 'man 5 modprobe.d'. See also
+'man 5 modules-load.d'.
 
 Default: ().
 
 *USEDMRAID=*
 
-Scan for FakeRAID (dmraid) Volumes at startup.
+Scan for FakeRAID (dmraid) volumes at start-up.
 
 Default: "no"
 
 *USEBTRFS=*
 
-Scan for BTRFS volumes at startup.
+Scan for Btrfs volumes at start-up.
 
 Default: "no"
 
 *USELVM=*
 
-Scan for LVM volume groups at startup, required if you use LVM.
+Scan for LVM volume groups at start-up. This is required if you use LVM.
 
 Default: "no"
 
@@ -138,7 +138,7 @@ The following settings help you setting up a wired network.
 
 *interface=*
 
-Name of device. Use 'ip addr' or 'ls /sys/class/net/' to see all available interfaces.
+Name of device. Use `ip addr` or `ls /sys/class/net/` to see all available interfaces.
 
 Default: empty
 
@@ -191,7 +191,7 @@ Required for manual configuration, ignored for DHCP.
 	netmask=
 	gateway=
 
-The following options might be needed for advanced use-cases.
+The following options might be needed for advanced use cases.
 
 *NETWORK_PERSIST=*
 
@@ -201,7 +201,7 @@ Default: "no"
 
 *NETWORKS=*
 
-This functionality is deprecated, please refer to the 'netcfg' documentation.
+This functionality is deprecated; please refer to 'man 8 netcfg'.
 
 DAEMONS[[D]]
 ------------
@@ -213,10 +213,10 @@ Daemons to start at boot-up (in this order)
 	- prefix a daemon with a @ to start it up in the background
 
 If you are sure nothing else touches your hardware clock (such as ntpd or
-a dual-boot), you might want to enable 'hwclock'. Note that this will only
+by dual-booting), you might want to enable 'hwclock'. Note that this will only
 make a difference if the hwclock program has been calibrated correctly.
 
-If you use a network filesystem you should enable 'netfs'.
+If you use a network filesystem, you should enable 'netfs'.
 
 Default: (syslog-ng network crond)
 
@@ -227,4 +227,4 @@ hostname(5), vconsole.conf(5), locale.conf(5), hwclock(8)
 
 AUTHORS
 -------
-Written by Dieter Plaetinck, Tom Gundersen and others.
+Written by Dieter Plaetinck, Tom Gundersen, and others.

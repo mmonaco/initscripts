@@ -25,7 +25,7 @@ The actions supported by a rc scripts may be different from script to script, bu
 commonly supported actions include:
 
 *start*::
-	Starts the script if it's not already running.
+	Starts the script if it is not already running.
 
 *stop*::
 	Stops a running script.

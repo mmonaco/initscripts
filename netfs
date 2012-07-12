@@ -6,7 +6,7 @@
 
 case "$1" in
 	start)
-		stat_busy "Mounting Network Filesystems"
+		stat_busy "Mounting network filesystems"
 		mount -a -t "$NETFS"
 		rc=$?
 		mount -a -O _netdev
@@ -15,7 +15,7 @@ case "$1" in
 		stat_done
 		;;
 	stop)
-		stat_busy "Unmounting Network Filesystems"
+		stat_busy "Unmounting network filesystems"
 		umount -a -f -O _netdev
 		rc=$?
 		umount -a -f -t "$NETFS"

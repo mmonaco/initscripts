@@ -10,7 +10,7 @@
 stty onlcr
 
 echo " "
-printhl "Initiating Shutdown..."
+printhl "Initiating shutdown..."
 echo " "
 
 run_hook shutdown_start
@@ -19,19 +19,19 @@ run_hook shutdown_start
 
 stop_all_daemons
 
-status 'Saving Random Seed' /usr/lib/systemd/systemd-random-seed save
+status 'Saving random seed' /usr/lib/systemd/systemd-random-seed save
 
-[[ $TIMEZONE ]] && status "Configuring Time Zone" set_timezone "$TIMEZONE"
+[[ $TIMEZONE ]] && status "Configuring time zone" set_timezone "$TIMEZONE"
 
 # Write to wtmp file before unmounting
 halt -w
 
-# stop monitoring of lvm2 groups before unmounting filesystems
+# stop monitoring of LVM2 groups before unmounting filesystems
 [[ $USELVM = [Yy][Ee][Ss] && -x $(type -P lvm) ]] &&
 	status "Deactivating monitoring of LVM2 groups" vgchange --monitor n
 
 # any future uevents can and should be ignored
-status "Shutting down UDev" udevadm control --exit
+status "Shutting down udev" udevadm control --exit
 
 run_hook shutdown_prekillall
 
@@ -41,15 +41,15 @@ run_hook shutdown_postkillall
 
 run_hook shutdown_preumount
 
-# unmount any non-api partitions that are backed by swap, we don't want to
+# unmount any non-API partitions that are backed by swap; we don't want to
 # move their contents into memory (waste of time and might caues OOM).
-status "Unmounting Swap-backed Filesystems" umount_all "tmpfs"
+status "Unmounting swap-backed filesystems" umount_all "tmpfs"
 
 # almost everything is dead now, so the swap should hopefully be relatively
 # empty, and quick to switch off
-status "Deactivating Swap" swapoff -a
+status "Deactivating swap" swapoff -a
 
-status "Unmounting Non-API Filesystems" umount_all
+status "Unmounting non-API filesystems" umount_all
 
 run_hook shutdown_postumount
 
@@ -90,14 +90,14 @@ if [[ -x /run/initramfs/shutdown ]]; then
 		fi
 	fi
 
-	# make /run/initrafs a mount
+	# make /run/initramfs a mount
 	mount --bind /run/initramfs /run/initramfs
 
 	# in case someone has shared our mountpoints, unshare them
 	mount --make-private /run/initramfs
 	mount --make-private /
 
-	# bind all api mounts
+	# bind all API mounts
 	mkdir -p /run/initramfs/{sys,proc,dev,run,oldroot}
 	mount --bind /sys /run/initramfs/sys
 	mount --bind /proc /run/initramfs/proc
@@ -108,7 +108,7 @@ if [[ -x /run/initramfs/shutdown ]]; then
 	cd /run/initramfs
 	pivot_root . oldroot
 
-	#reexec init
+	# reexec init
 	/oldroot/sbin/init u
 
 	# run /shutdown in the new root
@@ -116,7 +116,7 @@ if [[ -x /run/initramfs/shutdown ]]; then
 
 else
 
-	status "Remounting Root Filesystem Read-only" \
+	status "Remounting root filesystem read-only" \
 		mount -o remount,ro /
 
 	# Power off or reboot
