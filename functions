@@ -466,14 +466,13 @@ do_unlock_systemd() {
 	if ! /usr/lib/systemd/systemd-cryptsetup attach "$1" "$2" "$3" $4; then
 		failed=1
 	else
-		IFS=,
-		if in_array swap ${options[@]}; then
+		if IFS=, in_array swap ${options[@]}; then
 			# create swap on the device only if no fs signature exists
 			blkid -p "$2" &>/dev/null
 			if (( $? == 2 )) || ! mkswap /dev/mapper/$name >/dev/null; then
 				failed=1
 			fi
-		elif in_array tmp ${options[@]}; then
+		elif IFS=, in_array tmp ${options[@]}; then
 			# create fs on the device only if no fs signature exists
 			blkid -p "$2" &>/dev/null
 			if (( $? == 2 )) || ! mke2fs /dev/mapper/$name >/dev/null; then
