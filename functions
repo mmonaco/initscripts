@@ -335,6 +335,16 @@ kill_all() {
 		fi
 }
 
+print_welcome() {
+	# see os-release(5)
+	. /etc/os-release
+
+	echo " "
+	printhl "${PRETTY_NAME}\n"
+	printhl "${C_H2}${HOME_URL}"
+	printsep
+}
+
 load_modules() {
 	local rc=0
 

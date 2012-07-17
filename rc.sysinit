@@ -12,10 +12,8 @@ elif [[ $LOCALE ]]; then
 	export LANG=$LOCALE
 fi
 
-echo " "
-printhl "Arch Linux\n"
-printhl "${C_H2}https://www.archlinux.org"
-printsep
+# Prints distro name and URL
+print_welcome
 
 # mount the API filesystems
 # /proc, /sys, /run, /dev, /run/lock, /dev/pts, /dev/shm
