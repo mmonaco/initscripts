@@ -171,13 +171,13 @@ stat_die() {
 }
 
 status() {
-	[[ $1 = '-v' ]] && { local v=1; shift; }
+	[[ $1 = '-q' ]] && { local quiet=1; shift; }
 	stat_busy "$1"
 	shift
-	if (( v )); then
-		"$@"
-	else
+	if (( quiet )); then
 		"$@" &>/dev/null
+	else
+		"$@"
 	fi
 	local ret=$?
 	(( ret == 0 )) && stat_done || stat_fail
@@ -373,7 +373,7 @@ udevd_modprobe() {
 	stat_done
 
 	# Load modules from the MODULES array and modules-load.d
-	status -v "Loading user-specified modules" load_modules
+	status "Loading user-specified modules" load_modules
 
 	status "Waiting for udev uevents to be processed" \
 		udevadm settle
@@ -645,7 +645,7 @@ umount_all() {
 }
 
 remove_leftover() {
-	status -v 'Removing leftover files' systemd-tmpfiles --create --remove --clean
+	status 'Removing leftover files' systemd-tmpfiles --create --remove --clean
 }
 
 bootlogd_stop() {
