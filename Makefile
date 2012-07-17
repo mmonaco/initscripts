@@ -2,7 +2,6 @@ VER  := $(shell git describe)
 
 DIRS := \
 	/etc/rc.d \
-	/etc/conf.d \
 	/etc/rc.d/functions.d \
 	/etc/logrotate.d \
 	/etc/profile.d \
