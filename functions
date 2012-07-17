@@ -511,6 +511,10 @@ do_unlock() {
 	return $?
 }
 
+do_lock() {
+	status "Detaching encrypted device ${1}" /usr/lib/systemd/systemd-cryptsetup detach "$1" >/dev/null
+}
+
 read_crypttab() {
 	# $1 = function to call with the split out line from the crypttab
 	local line nspo failed=0
