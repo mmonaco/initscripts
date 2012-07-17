@@ -386,8 +386,7 @@ do_unlock_legacy() {
 	# $2 = source device
 	# $3 = password
 	# $4 = options
-	stat_append "${1}.."
-	printf "${C_FAIL}Using legacy crypttab format. This will stop working in the future. See crypttab(5).${C_OTHER}\n"
+	printf "${C_FAIL}Using legacy crypttab format. This will stop working in the future. See crypttab(5).${C_CLEAR}\n"
 	local open=create a=$1 b=$2 failed=0
 	# Ordering of options is different if you are using LUKS vs. not.
 	# Use ugly swizzling to deal with it.
@@ -416,7 +415,7 @@ do_unlock_legacy() {
 			if (( _overwriteokay == 0 )); then
 				false
 			elif cryptsetup -d /dev/urandom $4 $open "$a" "$b" >/dev/null; then
-				stat_append "creating swapspace.."
+				printf "creating swapspace..\n"
 				mkswap -f -L $1 /dev/mapper/$1 >/dev/null
 			fi;;
 		ASK)
@@ -451,18 +450,12 @@ do_unlock_legacy() {
 		*)
 			echo "$3" | cryptsetup $4 $open "$a" "$b" >/dev/null;;
 	esac
-	if (( $? )); then
-		failed=1
-		stat_append "failed "
-	else
-		stat_append "ok "
-	fi
-	return $failed
+	return $?
 }
 
 do_unlock_systemd() {
-	stat_append "${1}.."
 	local failed=0
+
 	if ! /usr/lib/systemd/systemd-cryptsetup attach "$1" "$2" "$3" $4; then
 		failed=1
 	else
@@ -480,16 +473,13 @@ do_unlock_systemd() {
 			fi
 		fi
 	fi
-	if (( $failed )); then
-		stat_append "failed "
-	else
-		stat_append "ok "
-	fi
 	return $failed
 }
 
 do_unlock() {
 	local name=$1 device=$2 password=$3 options=$4
+
+	printf "${C_MAIN}Unlocking $1${C_CLEAR}\n"
 
 	if [[ ${options:0:2} =~ -. ]]; then
 		do_unlock_legacy "$name" "$device" "$password" "$options"
@@ -514,6 +504,10 @@ do_unlock() {
 			do_unlock_legacy "$name" "$device" "$password" "$options"
 			;;
 	esac
+	failed=$?
+	if (( $failed )); then
+		printf "${C_FAIL}Unlocking of $1 failed.${C_CLEAR}\n"
+	fi
 	return $?
 }
 
