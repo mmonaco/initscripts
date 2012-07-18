@@ -34,9 +34,7 @@ network_up() {
 }
 
 network_down() {
-	have_interface "$interface" || return 1
-
-	if [[ -f /run/dhcpcd-$interface.pid ]]; then
+	if [[ ! -n $address ]] && [[ -f /run/dhcpcd-$interface.pid || -f /run/dhcpcd.pid ]]; then
 		dhcpcd -qk $interface || return 1
 	else
 		ip addr flush dev $interface || return 1
