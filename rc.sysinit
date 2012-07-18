@@ -6,12 +6,6 @@
 . /etc/rc.conf
 . /etc/rc.d/functions
 
-if [[ -s /etc/locale.conf ]]; then
-	parse_envfile /etc/locale.conf "LANG"
-elif [[ $LOCALE ]]; then
-	export LANG=$LOCALE
-fi
-
 # Prints distro name and URL
 print_welcome
 
