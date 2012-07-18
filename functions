@@ -723,7 +723,7 @@ else
 fi
 
 # set colors
-if [[ $USECOLOR = [yY][eE][sS] ]]; then
+if [[ $USECOLOR != [nN][oO] ]]; then
 	if tput setaf 0 &>/dev/null; then
 		C_CLEAR=$(tput sgr0)                      # clear text
 		C_MAIN=${C_CLEAR}$(tput bold)        # main text
