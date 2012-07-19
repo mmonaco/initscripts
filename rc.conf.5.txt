@@ -37,6 +37,98 @@ If you use a network filesystem, you should enable 'netfs'.
 
 	DAEMONS=('syslog-ng' 'network' 'crond')
 
+STORAGE[[S]]
+------------
+*USEDMRAID=*
+
+Scan for FakeRAID (dmraid) volumes at start-up.
+
+Default: 'no'
+
+	USEDMRAID="yes"
+
+*USEBTRFS=*
+
+Scan for Btrfs volumes at start-up.
+
+Default: 'no'
+
+	USEBTRFS="yes"
+
+*USELVM=*
+
+Scan for LVM volume groups at start-up. This is required if you use LVM.
+
+Default: 'no'
+
+	USELVM="yes"
+
+NETWORKING[[N]]
+---------------
+
+*HOSTNAME=*
+
+Hostname of machine. Unless nss-myhostname is used, this should also be set in /etc/hosts.
+
+The contents of /etc/hostname (if not empty) takes precedence (see hostname(5)), and is recommended.
+
+	HOSTNAME="arch1"
+
+The following settings are used by the 'network' daemon.
+
+*interface=*
+
+Name of device. Use `ip addr` or `ls /sys/class/net/` to see all available interfaces.
+
+Required for manual configuration. If using DHCP, it can be left unset, see dhcpcd(5) for details.
+
+*address=*
+
+IP address.
+
+Required for manual configuration. If left empty, DHCP will be used.
+
+*netmask=*
+
+Subnet mask.
+
+Defaults to 255.255.255.0. Ignored when using DHCP.
+
+*broadcast=*
+
+Broadcast address.
+
+Optional for manual configuration, ignored for DHCP.
+
+*gateway=*
+
+Default route.
+
+Required for manual configuration, ignored for DHCP.
+
+*Static IP example*
+
+	interface=eth0
+	address=192.168.0.2
+	netmask=255.255.255.0
+	broadcast=192.168.0.255
+	gateway=192.168.0.1
+
+*DHCP example*
+
+	interface=
+	address=
+	netmask=
+	gateway=
+
+*NETWORK_PERSIST=*
+
+Setting this to "yes" will skip network shutdown. This is required if your root device is on NFS.
+
+Default: 'no'
+
+	NETWORK_PERSIST="yes"
+
 LOCALIZATION[[L]]
 -----------------
 *TIMEZONE=*
@@ -136,97 +228,6 @@ Modules to load at boot-up.  To blacklist modules, see modprobe.d(5).
 Configuration files in /etc/modules-load.d/ are recommended instead (see modules-load.d(5)).
 
 	MODULES=('kvm')
-
-*USEDMRAID=*
-
-Scan for FakeRAID (dmraid) volumes at start-up.
-
-Default: 'no'
-
-	USEDMRAID="yes"
-
-*USEBTRFS=*
-
-Scan for Btrfs volumes at start-up.
-
-Default: 'no'
-
-	USEBTRFS="yes"
-
-*USELVM=*
-
-Scan for LVM volume groups at start-up. This is required if you use LVM.
-
-Default: 'no'
-
-	USELVM="yes"
-
-NETWORKING[[N]]
----------------
-*HOSTNAME=*
-
-Hostname of machine. Unless nss-myhostname is used, this should also be set in /etc/hosts.
-
-The contents of /etc/hostname (if not empty) takes precedence (see hostname(5)), and is recommended.
-
-	HOSTNAME="arch1"
-
-The following settings help you setting up a wired network.
-
-*interface=*
-
-Name of device. Use `ip addr` or `ls /sys/class/net/` to see all available interfaces.
-
-Required for manual configuration. If using DHCP, it can be left unset, see dhcpcd(5) for details.
-
-*address=*
-
-IP address.
-
-Required for manual configuration. If left empty, DHCP will be used.
-
-*netmask=*
-
-Subnet mask.
-
-Defaults to 255.255.255.0. Ignored when using DHCP.
-
-*broadcast=*
-
-Broadcast address.
-
-Optional for manual configuration, ignored for DHCP.
-
-*gateway=*
-
-Default route.
-
-Required for manual configuration, ignored for DHCP.
-
-*Static IP example*
-
-	interface=eth0
-	address=192.168.0.2
-	netmask=255.255.255.0
-	broadcast=192.168.0.255
-	gateway=192.168.0.1
-
-*DHCP example*
-
-	interface=
-	address=
-	netmask=
-	gateway=
-
-The following options might be needed for advanced use cases.
-
-*NETWORK_PERSIST=*
-
-Setting this to "yes" will skip network shutdown. This is required if your root device is on NFS.
-
-Default: 'no'
-
-	NETWORK_PERSIST="yes"
 
 SEE ALSO
 --------
