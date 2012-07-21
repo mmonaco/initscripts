@@ -217,7 +217,7 @@ Leave this unset, unless you have a specific reason to set it to 'no'.
 
 Use ANSI color sequences in start-up messages, unless set to 'no'.
 
-	DAEMON_LOCALE="yes"
+	USECOLOR="yes"
 
 HARDWARE[[H]]
 -------------
