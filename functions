@@ -171,7 +171,16 @@ stat_die() {
 }
 
 status() {
-	[[ $1 = '-q' ]] && { local quiet=1; shift; }
+	local quiet
+	case $1 in
+		-q)
+			quiet=1
+			;;&
+		-v)
+			# NOOP: supported for backwards compat
+			shift
+			;;
+	esac
 	stat_busy "$1"
 	shift
 	if (( quiet )); then
