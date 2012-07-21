@@ -138,10 +138,10 @@ to the correct zoneinfo file. Possible time zones are the relative path to a zon
 from the directory /usr/share/zoneinfo. For example, a German time zone would be Europe/Berlin,
 which refers to the file /usr/share/zoneinfo/Europe/Berlin.
 
-It is recommended to leave this unset, and rather update maintain the /etc/localtime symlink manually,
-or via third party tools. The reason for this is to avoid the symlink and the TIMEZONE variable to
-be out of sync, as they are only synchronized at boot. Also, most third-party applications that could
-maintain /etc/localtime do not know to also write to /etc/rc.conf.
+It is recommended to leave this unset, and rather maintain the /etc/localtime symlink manually, or via
+third party tools. The reason for this is to avoid the symlink and the TIMEZONE variable to be out of sync,
+as they are only synchronized at boot. Also, most third-party applications that could maintain
+/etc/localtime do not know to also write to /etc/rc.conf.
 
 	TIMEZONE="Europe/Berlin"
 
