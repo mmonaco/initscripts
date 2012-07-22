@@ -619,7 +619,7 @@ fsck_reboot() {
 }
 
 mount_all() {
-	mount -a -t "nosysfs,no${NETFS//,/,no}" -O no_netdev
+	mount -a -t "no${NETFS//,/,no}" -O no_netdev
 }
 
 umount_all() {
