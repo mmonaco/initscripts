@@ -34,13 +34,18 @@ network_up() {
 }
 
 network_down() {
-	if [[ ! -n $address ]] && [[ -f /run/dhcpcd-$interface.pid || -f /run/dhcpcd.pid ]]; then
-		dhcpcd -qk $interface || return 1
+	if [[ ! -n $interface ]]; then
+		if [[ -f /run/dhcpcd.pid ]]; then
+			dhcpcd -qk || return 1
+		fi
 	else
-		ip addr flush dev $interface || return 1
+		if [[ ! -n $address && -f /run/dhcpcd-$interface.pid ]]; then
+			dhcpcd -qk $interface || return 1
+		else
+			ip addr flush dev $interface || return 1
+		fi
+		ip link set dev $interface down || return 1
 	fi
-
-	ip link set dev $interface down || return 1
 }
 
 ifup() {
