@@ -7,7 +7,7 @@
 . /etc/rc.d/functions
 
 # don't let all the systemd tools be too verbose
-export SYSTEM_LOG_LEVEL="LOG_NOTICE"
+export SYSTEMD_LOG_LEVEL="notice"
 
 # Prints distro name and URL
 print_welcome

@@ -6,6 +6,9 @@
 . /etc/rc.conf
 . /etc/rc.d/functions
 
+# don't let all the systemd tools be too verbose
+export SYSTEMD_LOG_LEVEL="notice"
+
 # avoid staircase effect
 stty onlcr
 
