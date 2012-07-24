@@ -70,10 +70,6 @@ status 'Configuring virtual consoles' /usr/lib/systemd/systemd-vconsole-setup
 [[ $USEDMRAID = [Yy][Ee][Ss] && -x $(type -P dmraid) ]] &&
 	status "Activating FakeRAID arrays" dmraid -i -ay
 
-# Btrfs devices detection
-[[ $USEBTRFS = [Yy][Ee][Ss] && -x $(type -P btrfs) ]] &&
-	status "Activating Btrfs volumes" btrfs device scan
-
 # Activate LVM2 groups, if any
 activate_vgs
 

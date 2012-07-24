@@ -47,14 +47,6 @@ Default: 'no'
 
 	USEDMRAID="yes"
 
-*USEBTRFS=*
-
-Scan for Btrfs volumes at start-up.
-
-Default: 'no'
-
-	USEBTRFS="yes"
-
 *USELVM=*
 
 Scan for LVM volume groups at start-up. This is required if you use LVM.
