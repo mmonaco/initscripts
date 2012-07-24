@@ -482,7 +482,7 @@ do_unlock_systemd() {
 		if in_array swap ${options[@]}; then
 			# create swap on the device only if no fs signature exists
 			blkid -p "$2" &>/dev/null
-			if (( $? != 2 )) || ! mkswap /dev/mapper/$name >/dev/null; then
+			if (( $? != 2 )) || ! mkswap -f /dev/mapper/$name >/dev/null; then
 				failed=1
 			fi
 		elif in_array tmp ${options[@]}; then
