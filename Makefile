@@ -46,7 +46,7 @@ tar:
 	git archive HEAD --prefix=initscripts-$(VER)/ | xz > initscripts-$(VER).tar.xz
 
 release: tar
-	scp initscripts-$(VER).tar.xz gerolde.archlinux.org:/srv/ftp/other/initscripts/
 	scp initscripts-$(VER).tar.xz pkgbuild.com:~/packages/initscripts/trunk/
+	scp initscripts-$(VER).tar.xz gerolde.archlinux.org:/srv/ftp/other/initscripts/
 
 .PHONY: all installdirs install doc clean tar release
