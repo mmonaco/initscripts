@@ -499,8 +499,6 @@ do_unlock_systemd() {
 do_unlock() {
 	local name=$1 device=$2 password=$3 options=$4
 
-	printf "${C_MAIN}Unlocking $1${C_CLEAR}\n"
-
 	if [[ ${options:0:2} =~ -. ]]; then
 		do_unlock_legacy "$name" "$device" "$password" "$options"
 		return $?
@@ -524,15 +522,10 @@ do_unlock() {
 			do_unlock_legacy "$name" "$device" "$password" "$options"
 			;;
 	esac
-	failed=$?
-	if (( $failed )); then
-		printf "${C_FAIL}Unlocking of $1 failed.${C_CLEAR}\n"
-	fi
-	return $?
 }
 
 do_lock() {
-	status "Detaching encrypted device ${1}" /usr/lib/systemd/systemd-cryptsetup detach "$1" >/dev/null
+	/usr/lib/systemd/systemd-cryptsetup detach "$1" >/dev/null
 }
 
 read_crypttab() {
@@ -543,8 +536,10 @@ read_crypttab() {
 		eval nspo=("${line%#*}")
 		if $1 "${nspo[0]}" "${nspo[1]}" "${nspo[2]}" "${nspo[*]:3}"; then
 			crypto_unlocked=1
+			stat_append "$C_MAIN ${nspo[0]}$C_CLEAR"
 		else
 			failed=1
+			stat_append "$C_FAIL ${nspo[0]}$C_CLEAR"
 		fi
 	done 3< /etc/crypttab
 	return $failed
